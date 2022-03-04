@@ -1,11 +1,12 @@
-import { db } from '../config/connection';
-import { Profile } from '../models/User';
-import { profileSeeds } from './profileSeeds';
+const db = require('../config/connection');
+const { User } = require('../models');
+const userSeeds = require('./userSeeds.json');
 
 db.once('open', async () => {
   try {
-    await Profile.deleteMany({});
-    await Profile.create(profileSeeds);
+    await User.deleteMany({});
+    await User.create(userSeeds);
+
     console.log('Seeded done!!');
     process.exit(0);
   } catch (err) {

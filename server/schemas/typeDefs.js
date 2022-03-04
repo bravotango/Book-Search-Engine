@@ -1,5 +1,7 @@
 const { gql } = require('apollo-server-express');
-
+// A schema is a collection of type definitions (hence "typeDefs")
+// that together define the "shape" of queries that are executed against
+// your data.
 const typeDefs = gql`
   type Book {
     _id: ID
@@ -16,7 +18,7 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
-    savedBooks: [Book!]!
+    savedBooks: [Book]!
     bookCount: Int
   }
   type Auth {
@@ -25,18 +27,24 @@ const typeDefs = gql`
   }
   type Query {
     users: [User]!
-    user(UserId: ID!): User
+    user(id: ID!): User
     # Because we have the context functionality in place to check a JWT and decode its data, we can use a query that will always find and return the logged in user's data
     me: User
+    # books: [Book]
   }
 
   type Mutation {
     addUser(username: String!, email: String!, password: String!): Auth
     login(email: String!, password: String!): Auth
-
-    addSkill(UserId: ID!, skill: String!): User
-    removeUser: User
-    removeSkill(skill: String!): User
+    removeBook(bookId: String!): User
+    saveBook(
+      authors: [String]
+      description: String
+      bookId: String!
+      image: String
+      title: String!
+      link: String
+    ): User
   }
 `;
 

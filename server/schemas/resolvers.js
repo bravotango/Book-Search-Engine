@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User } = require('../models');
+const { User, Book } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -8,8 +8,8 @@ const resolvers = {
       return User.find();
     },
 
-    user: async (parent, { userId }) => {
-      return User.findOne({ _id: userId });
+    user: async (parent, { args }) => {
+      return User.findOne({ _id: args.id });
     },
     // By adding context to our query, we can retrieve the logged in user without specifically searching for them
     me: async (parent, args, context) => {
@@ -26,6 +26,54 @@ const resolvers = {
       const token = signToken(user);
 
       return { token, user };
+    },
+    removeBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        return await User.findOneAndUpdate(
+          { _id: context.user._id },
+          {
+            $pull: {
+              books: {
+                _id: bookId,
+              },
+            },
+          },
+          { new: true }
+        );
+      }
+    },
+    saveBook: async (
+      parent,
+      { authors, description, bookId, image, title, link },
+      context
+    ) => {
+      console.log('saveBook', context);
+      console.log(
+        'authors, description, bookId, image, title, link',
+        authors,
+        description,
+        bookId,
+        image,
+        title,
+        link
+      );
+      try {
+        const user = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          {
+            $addToSet: {
+              savedBooks: { authors, description, bookId, image, title, link },
+            },
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+        return user;
+      } catch (err) {
+        console.log('Err oin backend!', err);
+      }
     },
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });

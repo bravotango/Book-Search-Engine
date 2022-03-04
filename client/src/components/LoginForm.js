@@ -18,6 +18,7 @@ const LoginForm = () => {
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  // submit form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -28,7 +29,6 @@ const LoginForm = () => {
       console.log(data);
       Auth.login(data.login.token);
     } catch (e) {
-      console.log('an error has occurred... oh nooooooooooooo......');
       setShowAlert(true);
     }
 
