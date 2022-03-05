@@ -2,16 +2,6 @@
   {
     "username": "Bri Tra",
     "email": "britra@home.com",
-    "password": "12345678",
-    "savedBooks": [
-      {
-        "authors": ["bernie", "bob"],
-        "description": "Great book about nothing",
-        "bookId": "1",
-        "image": "",
-        "link": "",
-        "title": "Nothing to read here"
-      }
-    ]
+    "password": "12345678"
   }
 ]
