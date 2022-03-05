@@ -13,7 +13,7 @@ import {
 import Auth from '../utils/auth';
 
 import { SAVE_BOOK } from '../utils/mutations';
-import { searchGoogleBooks, saveBook } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API';
 
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
@@ -81,7 +81,7 @@ const SearchBooks = () => {
       const { data } = await saveBook({
         variables: {
           authors: book.authors,
-          description: book.description, // book.description is coming back undefined
+          description: book.description,
           bookId: book.bookId,
           image: book.image,
           title: book.title,
@@ -93,7 +93,7 @@ const SearchBooks = () => {
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, book.bookId]);
     } catch (err) {
-      console.error('Doctor, is there a doctor...we have an error: ', err);
+      console.error('Error: ', err);
     }
   };
 
@@ -142,7 +142,7 @@ const SearchBooks = () => {
                   />
                 ) : null}
                 <Card.Body>
-                  <Card.Title>{book.title}</Card.Title>
+                  <Card.Title>{book.bookId}</Card.Title>
                   <p className='small'>Authors: {book.authors}</p>
                   <Card.Text>{book.description}</Card.Text>
                   {Auth.loggedIn() && (
